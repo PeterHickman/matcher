@@ -50,7 +50,7 @@ func MatchPattern(pattern []string, text string) bool {
 				pos += len(sym)
 			} else {
 				// Beyond the start
-				if wild == true {
+				if wild {
 					pos += i + len(sym)
 				} else {
 					return false
