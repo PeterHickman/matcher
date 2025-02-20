@@ -17,7 +17,19 @@ func ParsePattern(text string) []string {
 				l = ""
 			}
 
-			t = append(t, c)
+			if len(t) == 0 {
+				// List is empty
+				t = append(t, c)
+			} else if c != "*" {
+				// Character is not "*"
+				t = append(t, c)
+			} else if t[len(t)-1] != "*" {
+				// List is not empty and the character is "*"
+				// but the last element of the list is not a "*"
+				t = append(t, c)
+			} else {
+				// Discard the duplicate "*"
+			}
 		} else {
 			l += c
 		}

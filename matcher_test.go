@@ -1,6 +1,7 @@
 package matcher
 
 import (
+	"strings"
 	"testing"
 )
 
@@ -12,6 +13,38 @@ func compare(t *testing.T, pattern, path string, expected bool) {
 	if expected != actual {
 		t.Fatalf("%s did not match %s", pattern, path)
 	}
+}
+
+func compare_slices(t *testing.T, expected, actual []string) {
+	if len(expected) != len(actual) {
+		es := "\"" + strings.Join(expected, "\", \"") + "\""
+		as := "\"" + strings.Join(actual, "\", \"") + "\""
+		t.Fatalf("Expected [%s] got [%s]", es, as)
+	}
+
+	for i, v := range expected {
+		if v != actual[i] {
+			es := "\"" + strings.Join(expected, "\", \"") + "\""
+			as := "\"" + strings.Join(actual, "\", \"") + "\""
+			t.Fatalf("Expected [%s] got [%s]", es, as)
+		}
+	}
+}
+
+func TestParseSimple(t *testing.T) {
+	pattern := "*.bak"
+	expected := []string{"*", ".bak"}
+	actual := ParsePattern(pattern)
+
+	compare_slices(t, expected, actual)
+}
+
+func TestParseCompressStars(t *testing.T) {
+	pattern := "**.bak"
+	expected := []string{"*", ".bak"}
+	actual := ParsePattern(pattern)
+
+	compare_slices(t, expected, actual)
 }
 
 func TestExactMatch(t *testing.T) {
